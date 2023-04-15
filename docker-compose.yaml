@@ -1,0 +1,30 @@
+version: '3'
+services:
+  db:
+    image: postgres
+    environment:
+      POSTGRES_USER: ordis
+      POSTGRES_PASSWORD: "%EM^r4P4fK3EDtgbi5@_gyDVfU"
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+  api:
+    image: abys72/ordiscloud-api
+    environment:
+      DATABASE_USER: ordis
+      PASSWORD_USER: "%EM^r4P4fK3EDtgbi5@_gyDVfU"
+      DATABASE: ordis
+      DATABASE_HOST: db
+      PORT_API: 443
+      SSL_CERTIFICATE: /etc/ssl/certs/fullchain.pem
+      SSL_PRIVATE_KEY: /etc/ssl/certs/privkey.pem
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /home/ubuntu/ssl:/etc/ssl/certs
+    depends_on:
+      - db
+volumes:
+  db_data:
